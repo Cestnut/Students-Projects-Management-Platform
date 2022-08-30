@@ -18,13 +18,6 @@ public class Professor extends Person {
         super(name, surname, ID);
     }
 
-    //public Student[] viewRequests(){}
-
-    //public Project[] viewProjects(){}
-
-    //public Proposal[] viewProposals(){}
-
-    
     public void assignProject(Student student, Project project){
         
     }
