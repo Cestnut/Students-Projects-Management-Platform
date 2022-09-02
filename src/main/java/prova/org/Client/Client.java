@@ -192,34 +192,4 @@ public class Client {
         json.put("args", jsonargs);
         return sendJSON(json);
     }
-
-    public static void main(String[] args) {
-        try{
-            Client client = new Client(new Socket("localhost", 5555));
-            System.out.println(client.studentRegister("name", "surname", "nonexistentemail", "password", 11));
-            System.out.println(client.studentAuth("nonexistentemail", "password"));
-            
-            
-            System.out.println(client.requireProject());
-            System.out.println(client.proposeProject("progetto di merda"));
-            System.out.println(client.updateProject("Requirement 1", true));
-            System.out.println(client.professorAuth("email", "passwordd"));
-                
-
-            ArrayList<String> requirements = new ArrayList<String>();
-            requirements.add("Requirement 1");
-            requirements.add("Requirement 2");
-            System.out.println(client.createProject(requirements, "progetto di merda"));
-            System.out.println(client.assignProject(11, 33, "https://github.com"));
-            System.out.println(client.acceptProposal(8, requirements, "https://github.com"));
-            System.out.println(client.viewRequiring());
-            System.out.println(client.viewProjects());
-            System.out.println(client.viewProposals());
-
-            System.out.println(client.close());
-            }
-            catch(Exception e){
-                e.printStackTrace();
-            }
-    }
 }
