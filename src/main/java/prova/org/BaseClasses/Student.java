@@ -32,7 +32,7 @@ public class Student extends Person{
     }
 
     public Proposal proposeProject(String description){
-        return proposalsmapper.create(this.ID, description);
+        return proposalsmapper.create(this.getID(), description);
     }
 
     public void toggleRequesting(){

@@ -2,7 +2,7 @@ package prova.org.BaseClasses;
 
 public abstract class Person {
     private String name, surname;
-    int ID;
+    private int ID;
     
     public Person(String name, String surname, int ID){
         this.name = name;
