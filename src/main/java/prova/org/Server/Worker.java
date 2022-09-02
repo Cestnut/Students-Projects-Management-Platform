@@ -6,7 +6,6 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.MalformedURLException;
 import java.net.Socket;
-import java.net.URL;
 import java.util.ArrayList;
 
 import org.json.JSONArray;
@@ -14,8 +13,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import prova.org.BaseClasses.Professor;
-import prova.org.BaseClasses.Project;
-import prova.org.BaseClasses.Proposal;
 import prova.org.BaseClasses.Student;
 import prova.org.Exceptions.EmailAlreadyUsedException;
 import prova.org.Exceptions.IDAlreadyUsedException;
@@ -24,7 +21,6 @@ import prova.org.Exceptions.NoSuchProposalException;
 import prova.org.Exceptions.NoSuchStudentException;
 import prova.org.Exceptions.WrongCredentialsException;
 import prova.org.Mappers.impl.ProfessorsMapperImpl;
-import prova.org.Mappers.impl.ProjectsMapperImpl;
 import prova.org.Mappers.impl.ProposalsMapperImpl;
 import prova.org.Mappers.impl.StudentsMapperImpl;
 
@@ -38,7 +34,6 @@ public class Worker implements Runnable{
     private StudentsMapperImpl studentsmapper = new StudentsMapperImpl();
     private ProposalsMapperImpl proposalsmapper = new ProposalsMapperImpl();
     private ProfessorsMapperImpl professorsmapper = new ProfessorsMapperImpl();
-    private ProjectsMapperImpl projectsmapper = new ProjectsMapperImpl();
 
 
     public Worker(Socket socket) throws IOException{
@@ -245,11 +240,8 @@ public class Worker implements Runnable{
         response.put("code", 0);
 
         try{
-            Project project = projectsmapper.getByID(projectID);
-            URL url = new URL(urlString);
-            
             if(professor != null){
-                studentsmapper.assignProject(studentID, project, url);
+                professor.assignProject(studentID, projectID, urlString);
                 response.put("message", "Project assigned");
             }
             else{
@@ -278,11 +270,9 @@ public class Worker implements Runnable{
 
         JSONObject response = new JSONObject();
         response.put("code", 0);
+        String urlString = args.getString("URL");
 
         try{
-            Proposal proposal = proposalsmapper.getByID(proposalID);
-            URL url = new URL(args.getString("URL"));
-            
             JSONArray jsonrequirements = args.getJSONArray("requirements");
             ArrayList<String> requirements = new ArrayList<String>();
             for (Object object : jsonrequirements) {
@@ -290,7 +280,7 @@ public class Worker implements Runnable{
             }
         
             if(professor != null){
-                professor.acceptProposal(proposal, requirements, url);
+                professor.acceptProposal(proposalID, requirements, urlString);
                 response.put("message", "Proposal accepted");
             }
             else{
@@ -319,7 +309,7 @@ public class Worker implements Runnable{
         response.put("code", 0);
 
         if(this.professor != null){
-            response.put("message", projectsmapper.fetchAll().toString());
+            response.put("message", professor.viewProjects());
         }
         else{
             response.put("message", "You must be a professor");
@@ -333,7 +323,7 @@ public class Worker implements Runnable{
         response.put("code", 0);
 
         if(this.professor != null){
-            response.put("message", proposalsmapper.fetchAll().toString());
+            response.put("message", professor.viewProposals());
         }
         else{
             response.put("message", "You must be a professor");
@@ -341,13 +331,14 @@ public class Worker implements Runnable{
         return response;   
     }
 
+    //public viewStudents
     public JSONObject viewStudents(){
 
         JSONObject response = new JSONObject();
         response.put("code", 0);
 
         if(this.professor != null){
-            response.put("message", studentsmapper.fetchAll().toString());
+            response.put("message", professor.viewStudents());
         }
         else{
             response.put("message", "You must be a professor");
@@ -363,7 +354,7 @@ public class Worker implements Runnable{
         response.put("code", 0);
 
         if(this.professor != null){
-            response.put("message", studentsmapper.getRequesting().toString());
+            response.put("message", professor.viewRequiring());
         }
         else{
             response.put("message", "You must be a professor");
@@ -376,7 +367,7 @@ public class Worker implements Runnable{
         JSONObject response = new JSONObject();
 
         try{
-            response.put("message", studentsmapper.getByID(studentID).toString());
+            response.put("message", professor.getStudentByID(studentID));
         }
         catch(NoSuchStudentException e){
             response.put("message", "There isn't a student with ID " + studentID);
