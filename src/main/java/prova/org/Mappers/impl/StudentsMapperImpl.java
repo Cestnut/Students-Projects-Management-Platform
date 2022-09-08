@@ -85,6 +85,7 @@ public class StudentsMapperImpl implements StudentsMapperInterface {
 
     @Override
     public void updateProjectStatus(Student student, String requirement, Boolean value) {
-        DB.updateProjectStatus(student, requirement, value);        
+        DB.updateProjectStatus(student, requirement, value);
+        student.updateProjectStatus(requirement, value);      
     }    
 }
