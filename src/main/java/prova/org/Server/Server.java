@@ -38,9 +38,6 @@ public class Server {
             ProfessorsMapperImpl professorsmapper = new ProfessorsMapperImpl();
             professorsmapper.create("Jhonny", "English", 123, "email", "password");
 
-        /*  MongoCollection<Document> students = DB.db.getCollection("students");
-            Document student1 = students.find(new Document("name", "Giovanni")).first();
-            System.out.println(student1.getString("name")+ " " + student1.getString("surname")); */
             while(true){
                 System.out.println("Listening for connection\n");
                 Socket socket = serversocket.accept();
