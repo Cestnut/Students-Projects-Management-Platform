@@ -1,6 +1,8 @@
 package prova.org.BaseClasses;
 
 import java.net.URL;
+import java.util.HashMap;
+
 import prova.org.Mappers.impl.ProposalsMapperImpl;
 
 public class Student extends Person{
@@ -27,6 +29,23 @@ public class Student extends Person{
         return this.project;
     }
 
+    public float getProjectCompletitionPercentual(){
+        if(this.project == null){
+            return 0;
+        }
+        else{
+            HashMap<String, Boolean> requirements = project.getStatus();
+            float counter = 0;
+            float requirementsNumber = requirements.size();
+            for (String key : requirements.keySet()) {
+                if(requirements.get(key) == true){
+                    counter += 1;
+                }
+            }
+            return counter/requirementsNumber*100;
+        }
+    }
+
     public void updateProjectStatus(String requirement, Boolean value){
         this.project.updateStatus(requirement, value);
     }
@@ -45,6 +64,11 @@ public class Student extends Person{
 
     @Override
     public String toString(){
-        return getID() + " " + getName() + " " + getSurname() + " " + getProject();
+        if(getProject() != null){
+            return getID() + " " + getName() + " " + getSurname() + " " + getProject() + " " + String.format("%.2f", getProjectCompletitionPercentual()) + "%";
+        }
+        else{
+            return getID() + " " + getName() + " " + getSurname();
+        }
     }
 }
