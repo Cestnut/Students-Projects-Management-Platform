@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.MalformedURLException;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.ArrayList;
 
 import org.json.JSONArray;
@@ -448,6 +449,9 @@ public class Worker implements Runnable{
             }
             catch(JSONException e){
                 e.printStackTrace();
+            }
+            catch(SocketException e){
+                running = false;
             }
             catch(IOException e){
                 e.printStackTrace();
