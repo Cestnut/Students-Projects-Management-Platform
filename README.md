@@ -47,7 +47,7 @@ All’interno del file pom.xml sono state inserite le seguenti dipendenze:
 # Server
 All'avvio il server legge da file a quale porta mettersi in ascolto. Successivamente chiama il metodo statico readSettings() dalla classe DB, che inizializza la variabile statica db, rappresentante la connessione col database, utilizzata successivamente per tutte le interazioni con il database.
 
-![ServerUML](Link)
+![ServerUML](uml/ServerSideUML.png)
 
 Verranno di seguito illustrate tutte le varie classi del modello.
 
@@ -222,8 +222,8 @@ Classe utilizzata per connettersi al database
 - public ArrayList <Professor> fetchAllProfessors()
 - public void deleteProfessorByID(int ID)
 - public Professor authProfessor(String email, byte[] hashedPassword) throws WrongCredentialsException
-   
-        
+
+
 ## MapperInterface
 Interfaccia implementata da tutti i mapper, con i Methods più generici
 ### Methods
@@ -273,7 +273,7 @@ Eccezione che indica l'assenza di una risorsa dal database. Viene ulteriormente 
 
 # Client
 
-![ClientUML](link)
+![ClientUML](uml/ClientSideUML.png)
 
 ## Client
 Gestisce lo scambio dei messaggi tra client-side e server-side.
