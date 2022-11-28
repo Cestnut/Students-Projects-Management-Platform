@@ -1,11 +1,11 @@
 # Introduzione
 
-Gli studenti possono iscriversi nella piattaforma e richiedere o proporre un progetto, e aggiornare lo stato di avanzamento del progetto.
+Gli studenti possono iscriversi nella piattaforma e richiedere o proporre un progetto, e aggiornarne lo stato di avanzamento.
 Il docente assegna il progetto oppure accetta la proposta dello studente e ne definisce i requisiti.
 
 Interpretando i requisiti abbiamo le seguenti specifiche:
 - Email e ID sono univoci. Uno studente e un professore possono avere lo stesso ID, essendo considerati due entità diverse.
-- Ogni studente effettuare solo una proposta
+- Ogni studente può effettuare solo una proposta
 - Con stato di avanzamento del progetto si intende specificare per ogni requisito se è stato soddisfatto
 
 Introduciamo inoltre i seguenti campi:
@@ -17,7 +17,7 @@ Introduciamo inoltre i seguenti campi:
 - Proporre un progetto dando una descrizione iniziale
     - Ogni studente può effettuare una e una sola proposta
 - Visualizzare se presente il proprio progetto
-- Aggiornare lo stato di avanzamento del proprio proitemizegetto
+- Aggiornare lo stato di avanzamento del proprio progetto
     - Vanno forniti il nome del requisito e il suo nuovo valore (svolto/non svolto)
 
 ## Professore
@@ -25,12 +25,12 @@ Introduciamo inoltre i seguenti campi:
 - Visualizzare tutte le proposte esistenti
 - Visualizzare l’elenco degli studenti richiedenti un progetto
 - Creare un nuovo progetto
-    - Vanno forniti lista dei requisiti e URL su cui andrà caricato il progetto
+    - Vanno forniti descrizione e lista dei requisiti
 - Accettare la proposta di uno studente
     - Ciò comporta l’assegnazione del progetto allo studente che ha effettuato la proposta
-- Vanno forniti lista dei requisiti e URL
+    - Vanno forniti lista dei requisiti e URL
 - Assegnare un progetto a uno studente
-    - Vanno forniti ID del progetto e dello studente
+    - Vanno forniti ID del progetto, ID dello studente e URL su cui andrà caricato il progetto
 - Ottenere le informazioni di uno studente dato il suo ID
 
 # Architettura
@@ -225,7 +225,7 @@ Classe utilizzata per connettersi al database
 
 
 ## MapperInterface
-Interfaccia implementata da tutti i mapper, con i Methods più generici
+Interfaccia implementata da tutti i mapper, con i metodi più generici
 ### Methods
 - public  <generic> getByID(int ID) throws NoSuchResourceException
 - public ArrayList <generic> fetchAll()
@@ -329,7 +329,9 @@ Presenta l'interfaccia da riga di comando all'utente. Utilizza la classe Client 
 # Requisiti
 ## Information Hiding
 Con Information Hiding si intende l'atto di nascondere il modo in cui un metodo o una classe sono stati implementati. 
+
 Ciò permette a una classe di usarne un'altra senza sapere come funziona, dando ai programmatori la possibilità di cambiare l'implementazione di quest'ultima senza dover cambiare il resto del codice.
+
 Un esempio di ciò si ha nel metodo create della classe **StudentsMapperImpl**
 
 ```
@@ -343,7 +345,8 @@ return new Student(name, surname, ID);
 Vediamo che viene chiamato il metodo **insertStudent** della classe **DB**. Se dovesse cambiare l'implementazione del metodo nella classe DB, magari perché si usa un altro DBMS con API diversa, non sarebbe necessario modificare la classe **StudentsMapperImpl**.
 
 ## Incapsulamento
-L'incapsulamento è un concetto della programmazione a oggetti per cui all'interno di una classe sono presenti sia gli attributi che i Methods che operano su di essi. In questo modo si può rendere impossibile dall'esterno l'accesso agli attributi di una classe, se non tramite dei Methods interni alla classe che magari eseguono dei controlli sulla validità degli input.
+L'incapsulamento è un concetto della programmazione a oggetti per cui all'interno di una classe sono presenti sia gli attributi che i metodi che operano su di essi. In questo modo si può rendere impossibile dall'esterno l'accesso agli attributi di una classe, se non tramite dei metodi interni alla classe che magari eseguono dei controlli sulla validità degli input.
+
 Anche se senza controlli specifici, un'esempio è la classe **Student**:
 
 ```
@@ -359,10 +362,10 @@ public class Student extends Person{
 }
 ```
 
-Qui l'attributo project è accessibile solo tramite i due Methods, che potrebbero effettuare dei controlli aggiuntivi.
+Qui l'attributo project è accessibile solo tramite i due metodi, che potrebbero effettuare dei controlli aggiuntivi.
 
 ## Ereditarietà
-L'ereditarietà è un concetto che si applica tra due classi, una classe padre e una classe figlio, facendo in modo che il figlio erediti i Methods e gli attributi del padre, potendo così riutilizzarli e in caso modificarli (overriding).
+L'ereditarietà è un concetto che si applica tra due classi, una classe padre e una classe figlio, facendo in modo che il figlio erediti i metodi e gli attributi del padre, potendo così riutilizzarli e in caso modificarli (overriding).
 In java viene utilizzata la keyword **Extends**. Un esempio si ha tra la classe astratta **Person** e la classe **Student**:
 
 ```
@@ -370,7 +373,7 @@ public abstract class Person { ... }
 public class Student extends Person{ ... }
 ```
 
-In questo modo la classe **Student** eredita tutti i Methods e gli attributi della classe **Person**, e può liberamente riutilizzarli, incluso ad esempio il costruttore:
+In questo modo la classe **Student** eredita tutti i metodi e gli attributi della classe **Person**, e può liberamente riutilizzarli, incluso ad esempio il costruttore:
 
 ```
   public Student(String name, String surname, int ID){
@@ -381,8 +384,10 @@ In questo modo la classe **Student** eredita tutti i Methods e gli attributi del
 
 La classe Studente richiama il costruttore che prende in ingresso i parametri **(String, String, ID)** e in più lo estendo inizializzando un proprio attributo.
 Una classe può essere figlia solamente di un'altra classe.
+
 ## Overloading
-**L'overloading** è un concetto per cui si possono avere all'interno di una classe due o più Methods con lo stesso nome, dandogli quindi implementazioni diverse, a patto che il tipo di parametri aspettati sia diverso.
+**L'overloading** è un concetto per cui si possono avere all'interno di una classe due o più metodi con lo stesso nome, dandogli quindi implementazioni diverse, a patto che il tipo di parametri aspettati sia diverso.
+
 Un esempio di ciò si ha nella classe **StudentsMapperInterface**:
 
 ```
@@ -404,7 +409,8 @@ In questo caso si ha che il secondo metodo prende prima lo studente dal database
 ```
 
 ## Overriding
-L'overriding si ha quando i Methods di una classe sovrascrivono quelli della classe che estende o dell'interfaccia che implementa (in quest'ultimo caso è obbligatorio).
+L'overriding si ha quando i metodi di una classe sovrascrivono quelli della classe che estende o dell'interfaccia che implementa (in quest'ultimo caso è obbligatorio).
+
 Un esempio lo abbiamo nella classe **Student**, viene fatto l'override del metodo toString, definito per la prima volta nella classe **Object**, padre di tutte le classi.
 
 ```
@@ -415,8 +421,9 @@ public String toString{
 ```
 
 ## Classe Astratta
-Una classe astratta è una classe che può avere Methods astratti o Methods implementati, ma non può esistere un'istanza di tale classe. I Methods astratti vanno implementati dalla classe figlia, a meno che quest'ultima non sia astratta a sua volta.
-Un esempio ne è la classe **Person**, che in questo caso non ha Methods astratti:
+Una classe astratta è una classe che può avere metodi astratti o metodi implementati, ma non può esistere un'istanza di tale classe. I metodi astratti vanno implementati dalla classe figlia, a meno che quest'ultima non sia astratta a sua volta.
+
+Un esempio ne è la classe **Person**, che in questo caso non ha metodi astratti:
 
 ```
 public abstract class Person{
@@ -425,8 +432,10 @@ public abstract class Person{
 ```
 
 ## Interfaccia
-Le interfacce sono delle raccolte di attributi e Methods astratti che non possono essere implementati, a differenza delle classi astratte.
+Le interfacce sono delle raccolte di attributi e metodi astratti che non possono essere implementati, a differenza delle classi astratte.
+
 Una classe può implementare più di un'interfaccia alla volta, oltre che estendere un'altra classe. In questo modo si ottiene una sorta di ereditarietà multipla.
+
 Un'esempio di interfaccia è l'interfaccia **ProposalsMapperInterface**:
 
 ```
@@ -436,14 +445,19 @@ public interface ProposalsMapperInterface extends MapperInterface <Proposal> {
 }
 ```
 
-Come si può vedere quest'interfaccia eredita i Methods della classe **MapperInterface**, ed essendo anch'essa un'interfaccia non ha bisogno di implementarli.
+Come si può vedere quest'interfaccia eredita i metodi della classe **MapperInterface**, ed essendo anch'essa un'interfaccia non ha bisogno di implementarli.
 
 ## Networking
 Java fornisce quattro classi per la connessione tra applicazioni, dando la possibilità di scegliere tra connessione UDP e TCP.
+
 Per la modalità UDP abbiamo DatagramSocket e DatagramPacket.
+
 Per la modalità TCP, che è quella utilizzata nel progetto, abbiamo invece Socket e ServerSocket.
+
 La classe ServerSocket è la classe utilizzata dal server che si mette in ascolto su una porta e genera un oggetto Socket quando riceve una connessione.
+
 La classe Socket è utilizzata per lo scambio di dati in entrambi i sensi di comunicazione.
+
 Nel progetto esiste la classe **Server** che utilizza entrambe. All'interno del main abbiamo:
 
 ```
@@ -460,17 +474,23 @@ while(true){
 ```
 
 Viene prima generata la serversocket, legandola alla Server.port.
+
 All'interno di un while infinto viene chiamato il metodo **accept**, che resta in attesa di connessione e genera un oggetto Socket quando ne riceve una.
+
 L'oggetto socket viene poi passato al metodo Worker per svolgere le operazioni di I/O col client.
 
 
 ## Multithreading
 Il multithreading è una tecnica che permette di eseguire diversi flussi di istruzioni concorrentemente condividendo alcune risorse, senza dover quindi necessariamente creare un altro processo.
+
 In java il multithreading può essere realizzato in due modi:
-estendendo la classe **Thread** per poi chiamare il metodo **start**, oppure implementando l'interfaccia **Runnable** e facendo l'override del metodo **run** che sarà poi il metodo da cui partirà l'esecuzione di ogni thread.
+- estendendo la classe **Thread** per poi chiamare il metodo **start**
+- implementando l'interfaccia **Runnable** e facendo l'override del metodo **run** che sarà poi il metodo da cui partirà l'esecuzione di ogni thread.
+
 Viene poi instanziato un'oggetto della classe Thread, passando in input al costruttore l'oggetto che implementa la classe Runnable.
 Infine viene eseguito il metodo start.
-Il multithreading viene utilizzato nel progetto per poter gestire più connessioni contemporaneamente. La classe **Worker** implementa i Methods per interagire con il client.
+
+Il multithreading viene utilizzato nel progetto per poter gestire più connessioni contemporaneamente. La classe **Worker** implementa i metodi per interagire con il client.
 
 ```
     public class Worker implements Runnable{
